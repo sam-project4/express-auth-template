@@ -11,4 +11,12 @@ router.get("/example", tokenAuth, (req, res, next) => {
   // start a promise chain, so that any errors will pass to `handle`
 });
 
+router.get("/api/products", (req, res) => {
+  models.Product.findAll()
+    .then(products => {
+      res.status(200).json({ products: products });
+    })
+    .catch(e => console.log(e));
+});
+
 export default router;
