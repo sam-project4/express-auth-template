@@ -23,7 +23,7 @@ router.get("/api/products", (req, res) => {
 
 router.post("/api/products", (req, res) => {
   console.log(req.body)
-  models.Product.create(req.body.products)
+  models.Product.create(req.body.product)
   .then(product => {
     res.status(200).json({
       product: product
