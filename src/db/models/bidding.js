@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Bidding = sequelize.define(
     "Bidding",
     {
-      bid_number: DataTypes.INTEGER
+      bid_number: DataTypes.INTEGER,
+      
     },
     { tableName: "biddings" }
   );
