@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = models => {
     // associations can be defined here
+    User.hasMany(models.Bidding);
   };
   return User;
 };
