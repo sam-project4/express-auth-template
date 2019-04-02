@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       bid_number: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DOUBLE
       },
       created_at: {
         allowNull: false,

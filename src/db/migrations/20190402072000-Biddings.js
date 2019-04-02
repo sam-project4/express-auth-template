@@ -3,8 +3,23 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.addColumn("biddings", "user_id", Sequelize.INTEGER),
-      queryInterface.addColumn("biddings", "product_id", Sequelize.INTEGER)
+      queryInterface.addColumn("biddings", "user_id",     
+      { 
+      type: Sequelize.INTEGER,
+      onDelete: "CASCADE",
+      references: {
+        model: "users"
+      } 
+    })
+      
+      ,
+      queryInterface.addColumn("biddings", "product_id",      { 
+        type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
+        references: {
+          model: "products"
+        } 
+      })
     ]);
   },
 

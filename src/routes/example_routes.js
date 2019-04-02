@@ -12,7 +12,10 @@ router.get("/example", tokenAuth, (req, res, next) => {
 });
 
 router.get("/api/products", (req, res) => {
-  models.Product.findAll()
+  models.Product.findAll({ 
+     include: [ { model: models.Bidding 
+  }] , 
+  order: [ [  models.Bidding   , 'bid_number', 'desc'] ]})
     .then(products => {
       res.status(200).json({ products: products });
     })
@@ -86,5 +89,58 @@ router.put("/api/product/:id", (req, res) => {
     })
     .catch(e => console.log(e));
 });
+
+router.get("/api/product/:id/bid", (req, res) => {
+  if (!isNaN(req.params.id)) {
+    models.Product.findOne({ 
+      where: { id : req.params.id} ,
+       include: [ { model: models.Bidding 
+    }] , 
+    order: [ [  models.Bidding   , 'bid_number', 'desc'] ]})
+      .then(bidding => {
+        if (bidding !== null) {
+          res.status(200).json({ bidding: bidding.Biddings[0] });
+        } else {
+          res.status(404).json({
+            error: "bidding not found"
+          });
+        }
+      })
+      .catch(e => console.log(e));
+  } else {
+    res.status(406).json({ error: "Invalid ID" });
+  }
+});
+
+router.post("/api/products/:id/bid", tokenAuth ,  (req, res) => {
+  console.log("\n\n\n\n\n -----" , req.body);
+
+  
+  models.Bidding.create({
+    bid_number: req.body.bid,
+  UserId : req.user.id,
+  ProductId: req.params.id
+    
+  })
+    .then(bidding => {
+      res.status(200).json({
+        bidding: bidding
+      });
+    })
+    .catch(e => console.log(e));
+});
+
+// router.put("/api/products/:id/bid", )
+
+
+router.get("/api/bids", (req, res) => {
+  models.Bidding.findAll()
+    .then(bidding => {
+      res.status(200).json({ bidding: bidding });
+    })
+    .catch(e => console.log(e));
+});
+
+
 
 export default router;
