@@ -16,12 +16,18 @@ const router = express.Router();
 
 router.post("/sign-up", (req, res, next) => {
   // start a promise chain, so that any errors will pass to `handle`
+  const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
+// console.log("\n\n\n\n\n\n testing pass" ,  mediumRegex.test(req.body.credentials.password))
   Promise.resolve(req.body.credentials)
     .then(credentials => {
+     
       if (
         !credentials ||
         !credentials.password ||
-        credentials.password !== credentials.password_confirmation
+        credentials.password !== credentials.password_confirmation ||   
+        !mediumRegex.test(credentials.password) ||
+        credentials.password.length < 8 
       ) {
         throw new BadParamsError();
       } else {
